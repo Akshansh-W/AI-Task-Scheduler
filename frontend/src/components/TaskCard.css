@@ -1,0 +1,249 @@
+.task-card {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.task-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.task-card h4 {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.task-deadline {
+  margin-top: 4px;
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.task-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.priority,
+.status-pill {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 0 9px;
+  text-transform: capitalize;
+}
+
+.priority.high {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.priority.medium {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priority.low {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.remaining {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-pill.completed {
+  background: #ccfbf1;
+  color: #0f766e;
+}
+
+.task-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.task-meta div {
+  min-width: 0;
+}
+
+.task-meta dt {
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.task-meta dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.ai-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px;
+  border: 1px solid rgba(15, 118, 110, 0.18);
+  border-radius: 8px;
+  background: #f0fdfa;
+}
+
+.ai-note span {
+  display: inline-grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border-radius: 6px;
+  background: #0f766e;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.ai-note p {
+  color: #134e4a;
+  font-size: 14px;
+}
+
+.task-portions {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 8px;
+  background: #f8fbff;
+}
+
+.portions-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.portions-title span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.portions-title strong {
+  display: inline-grid;
+  min-width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 13px;
+}
+
+.task-portions ol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-portions li {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.task-portions li div {
+  display: grid;
+  gap: 2px;
+}
+
+.task-portions li strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.task-portions li span,
+.task-portions li small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.task-portions li .sms-state,
+.task-portions li .email-state {
+  width: fit-content;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.task-portions li .sms-state.sent,
+.task-portions li .email-state.sent {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.task-portions li .sms-state.failed,
+.task-portions li .email-state.failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.task-portions li .sms-state.skipped,
+.task-portions li .email-state.skipped {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.task-portions li p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.task-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.task-actions button {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 620px) {
+  .task-meta {
+    grid-template-columns: 1fr;
+  }
+}

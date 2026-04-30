@@ -1,0 +1,47 @@
+.schedule-page {
+  padding: 28px;
+}
+
+.page-heading {
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.page-heading h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.page-heading p:not(.eyebrow) {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+.scheduler-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .schedule-page {
+    padding: 20px;
+  }
+
+  .scheduler-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .schedule-page {
+    padding: 16px;
+  }
+
+  .page-heading h2 {
+    font-size: 28px;
+  }
+}

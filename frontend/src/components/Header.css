@@ -1,0 +1,86 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(90deg, rgba(15, 118, 110, 0.08), transparent 42%),
+    #ffffff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-mark {
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.brand h1 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.05;
+}
+
+.page-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.page-tabs button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.page-tabs button.active {
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+@media (max-width: 920px) {
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-tabs {
+    width: 100%;
+  }
+
+  .page-tabs button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    padding: 16px;
+  }
+}

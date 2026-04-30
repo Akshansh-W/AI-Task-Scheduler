@@ -1,0 +1,183 @@
+.task-form {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.field.wide {
+  grid-column: 1 / -1;
+}
+
+.field span,
+.toggle-row {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 46px;
+  box-sizing: border-box;
+  border: 1px solid #d7dde7;
+  border-radius: 8px;
+  background: #fbfcfe;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: 0;
+  padding: 11px 12px;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.field textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: #0f766e;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+}
+
+.form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.notification-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.toggle-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle-row input {
+  position: absolute;
+  opacity: 0;
+}
+
+.toggle-control {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition: background 160ms ease;
+}
+
+.toggle-control::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 160ms ease;
+}
+
+.toggle-row input:checked + .toggle-control {
+  background: #0f766e;
+}
+
+.toggle-row input:checked + .toggle-control::after {
+  transform: translateX(18px);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-button {
+  padding: 0 20px;
+  background: #0f766e;
+  color: #ffffff;
+  box-shadow: 0 12px 26px rgba(15, 118, 110, 0.22);
+}
+
+.primary-button:disabled {
+  cursor: not-allowed;
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+.secondary-button {
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+@media (max-width: 920px) {
+  .form-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .form-actions {
+    width: 100%;
+  }
+
+  .form-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .task-form {
+    padding: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

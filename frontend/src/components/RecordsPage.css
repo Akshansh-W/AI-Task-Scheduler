@@ -1,0 +1,86 @@
+.records-page {
+  padding: 28px;
+}
+
+.records-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.records-header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 34px;
+  line-height: 1.05;
+}
+
+.record-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.record-filters button {
+  min-height: 36px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.record-filters button.active {
+  background: #ffffff;
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.task-board {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 920px) {
+  .records-page {
+    padding: 20px;
+  }
+
+  .records-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .record-filters {
+    width: 100%;
+  }
+
+  .record-filters button {
+    flex: 1;
+  }
+
+  .task-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .records-page {
+    padding: 16px;
+  }
+
+  .records-header h2 {
+    font-size: 28px;
+  }
+}

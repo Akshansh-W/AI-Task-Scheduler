@@ -1,0 +1,30 @@
+.app-shell {
+  width: min(1180px, calc(100% - 32px));
+  min-height: calc(100svh - 32px);
+  margin: 16px auto;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.1);
+  overflow: hidden;
+}
+
+.app-message {
+  margin: 0;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fafc;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 920px) {
+  .app-shell {
+    width: 100%;
+    min-height: 100svh;
+    margin: 0;
+    border-radius: 0;
+    border-inline: 0;
+  }
+}
