@@ -273,3 +273,43 @@ export async function updateTaskStatus(request, response, next) {
     next(error)
   }
 }
+
+export async function deleteCompletedTask(request, response, next) {
+  try {
+    const { id } = request.params
+    const db = getPool()
+
+    const [rows] = await db.query(
+      `
+        SELECT id, status
+        FROM tasks
+        WHERE id = ?
+      `,
+      [id],
+    )
+
+    if (rows.length === 0) {
+      const error = new Error('Task not found')
+      error.statusCode = 404
+      throw error
+    }
+
+    if (rows[0].status !== 'completed') {
+      const error = new Error('Only completed tasks can be deleted')
+      error.statusCode = 400
+      throw error
+    }
+
+    await db.query(
+      `
+        DELETE FROM tasks
+        WHERE id = ?
+      `,
+      [id],
+    )
+
+    response.status(204).send()
+  } catch (error) {
+    next(error)
+  }
+}
