@@ -1,14 +1,12 @@
-import { buildAiSuggestion, formatSchedule } from '../utils/schedule'
-import './TaskCard.css'
+import { buildAiSuggestion, formatSchedule } from "../utils/schedule";
+import "./TaskCard.css";
 
 function TaskCard({ onComplete, onReopen, status, task }) {
   return (
     <article className="task-card">
       <div className="task-card-head">
         <div>
-          <span className={`priority ${task.priority.toLowerCase()}`}>
-            {task.priority}
-          </span>
+          <span className={`priority ${task.priority.toLowerCase()}`}>{task.priority}</span>
           <h4>{task.title}</h4>
           <p className="task-deadline">{formatSchedule(task)}</p>
         </div>
@@ -24,11 +22,7 @@ function TaskCard({ onComplete, onReopen, status, task }) {
         </div>
         <div>
           <dt>Email reminders</dt>
-          <dd>{task.emailEnabled ? task.emailAddress : 'Off'}</dd>
-        </div>
-        <div>
-          <dt>SMS reminders</dt>
-          <dd>{task.smsEnabled ? task.mobileNumber : 'Off'}</dd>
+          <dd>{task.emailEnabled ? task.emailAddress : "Off"}</dd>
         </div>
         <div>
           <dt>Owner</dt>
@@ -58,16 +52,7 @@ function TaskCard({ onComplete, onReopen, status, task }) {
                 </div>
                 <p>{part.objective}</p>
                 {part.notes ? <small>{part.notes}</small> : null}
-                {part.smsStatus ? (
-                  <small className={`sms-state ${part.smsStatus}`}>
-                    SMS: {part.smsStatus}
-                  </small>
-                ) : null}
-                {part.emailStatus ? (
-                  <small className={`email-state ${part.emailStatus}`}>
-                    Email: {part.emailStatus}
-                  </small>
-                ) : null}
+                {part.emailStatus ? <small className={`email-state ${part.emailStatus}`}>Email: {part.emailStatus}</small> : null}
               </li>
             ))}
           </ol>
@@ -75,7 +60,7 @@ function TaskCard({ onComplete, onReopen, status, task }) {
       ) : null}
 
       <div className="task-actions">
-        {status === 'remaining' ? (
+        {status === "remaining" ? (
           <button type="button" onClick={() => onComplete(task.id)}>
             Mark Complete
           </button>
@@ -86,7 +71,7 @@ function TaskCard({ onComplete, onReopen, status, task }) {
         )}
       </div>
     </article>
-  )
+  );
 }
 
-export default TaskCard
+export default TaskCard;

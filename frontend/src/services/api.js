@@ -2,9 +2,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 async function request(path, options = {}) 
 {
+  const token = window.localStorage.getItem('chronos-token')
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options.headers,
     },
     ...options,
@@ -17,6 +19,20 @@ async function request(path, options = {})
   }
 
   return data
+}
+
+export async function signUp(credentials) {
+  return request('/auth/signup', {
+    body: JSON.stringify(credentials),
+    method: 'POST',
+  })
+}
+
+export async function logIn(credentials) {
+  return request('/auth/login', {
+    body: JSON.stringify(credentials),
+    method: 'POST',
+  })
 }
 
 export async function fetchTasks() {

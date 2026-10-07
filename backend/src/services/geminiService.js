@@ -87,7 +87,7 @@ export async function generateTaskSchedule(task) {
         Split the total duration into useful, chronological work portions.
         Each portion must have a clear action title, objective, start time, end time, and duration.
         Keep every part within the total task duration and before the due date/time when possible.
-        Return local 24-hour HH:MM times because SMS reminders will be sent when each portion starts.
+        Return local 24-hour HH:MM times for the scheduled task portions.
 
         Task:
         ${JSON.stringify(task, null, 2)}

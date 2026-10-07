@@ -1,4 +1,4 @@
-import './TaskForm.css'
+import "./TaskForm.css";
 
 function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm }) {
   return (
@@ -6,24 +6,12 @@ function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm
       <div className="form-grid">
         <label className="field wide">
           <span>Task title</span>
-          <input
-            name="title"
-            onChange={onUpdate}
-            placeholder="Finish machine learning assignment"
-            type="text"
-            value={taskForm.title}
-          />
+          <input name="title" onChange={onUpdate} placeholder="Finish machine learning assignment" type="text" value={taskForm.title} />
         </label>
 
         <label className="field">
           <span>Your name or owner</span>
-          <input
-            name="owner"
-            onChange={onUpdate}
-            placeholder="Who is doing this?"
-            type="text"
-            value={taskForm.owner}
-          />
+          <input name="owner" onChange={onUpdate} placeholder="Who is doing this?" type="text" value={taskForm.owner} />
         </label>
 
         <label className="field">
@@ -49,22 +37,12 @@ function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm
 
         <label className="field">
           <span>Deadline date</span>
-          <input
-            name="dueDate"
-            onChange={onUpdate}
-            type="date"
-            value={taskForm.dueDate}
-          />
+          <input name="dueDate" onChange={onUpdate} type="date" value={taskForm.dueDate} />
         </label>
 
         <label className="field">
           <span>Deadline time</span>
-          <input
-            name="dueTime"
-            onChange={onUpdate}
-            type="time"
-            value={taskForm.dueTime}
-          />
+          <input name="dueTime" onChange={onUpdate} type="time" value={taskForm.dueTime} />
         </label>
 
         <label className="field">
@@ -80,33 +58,12 @@ function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm
 
         <label className="field">
           <span>Email for notifications</span>
-          <input
-            name="emailAddress"
-            onChange={onUpdate}
-            placeholder="you@example.com"
-            type="email"
-            value={taskForm.emailAddress}
-          />
-        </label>
-
-        <label className="field">
-          <span>Mobile number for SMS</span>
-          <input
-            name="mobileNumber"
-            onChange={onUpdate}
-            placeholder="+919876543210"
-            type="tel"
-            value={taskForm.mobileNumber}
-          />
+          <input name="emailAddress" onChange={onUpdate} placeholder="you@example.com" type="email" value={taskForm.emailAddress} />
         </label>
 
         <label className="field">
           <span>Focus window</span>
-          <select
-            name="focusWindow"
-            onChange={onUpdate}
-            value={taskForm.focusWindow}
-          >
+          <select name="focusWindow" onChange={onUpdate} value={taskForm.focusWindow}>
             <option>Morning</option>
             <option>Afternoon</option>
             <option>Evening</option>
@@ -161,25 +118,9 @@ function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm
       <div className="form-footer">
         <div className="notification-toggles">
           <label className="toggle-row">
-            <input
-              checked={taskForm.emailEnabled}
-              name="emailEnabled"
-              onChange={onUpdate}
-              type="checkbox"
-            />
+            <input checked={taskForm.emailEnabled} name="emailEnabled" onChange={onUpdate} type="checkbox" />
             <span className="toggle-control"></span>
             <span>Email each portion</span>
-          </label>
-
-          <label className="toggle-row">
-            <input
-              checked={taskForm.smsEnabled}
-              name="smsEnabled"
-              onChange={onUpdate}
-              type="checkbox"
-            />
-            <span className="toggle-control"></span>
-            <span>SMS each portion</span>
           </label>
         </div>
 
@@ -187,17 +128,13 @@ function TaskForm({ isFormReady, isSaving, onReset, onSubmit, onUpdate, taskForm
           <button className="secondary-button" onClick={onReset} type="button">
             Clear
           </button>
-          <button
-            className="primary-button"
-            disabled={!isFormReady || isSaving}
-            type="submit"
-          >
-            {isSaving ? 'Scheduling...' : 'Add Task'}
+          <button className="primary-button" disabled={!isFormReady || isSaving} type="submit">
+            {isSaving ? "Scheduling..." : "Add Task"}
           </button>
         </div>
       </div>
     </form>
-  )
+  );
 }
 
-export default TaskForm
+export default TaskForm;

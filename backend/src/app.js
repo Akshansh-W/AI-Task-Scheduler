@@ -2,6 +2,7 @@ import 'dotenv/config'
 import cors from 'cors'
 import express from 'express'
 import { errorHandler } from './middleware/errorHandler.js'
+import authRoutes from './routes/auth.js'
 import taskRoutes from './routes/tasks.js'
 
 export const app = express()
@@ -17,5 +18,6 @@ app.get('/api/health', (_request, response) => {
   response.json({ ok: true })
 })
 
+app.use('/api/auth', authRoutes)
 app.use('/api/tasks', taskRoutes)
 app.use(errorHandler)

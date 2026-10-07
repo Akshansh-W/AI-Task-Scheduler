@@ -1,9 +1,9 @@
-import './AiPreviewPanel.css'
+import "./AiPreviewPanel.css";
 
 function AiPreviewPanel({ preview, remainingTasksCount, totalMinutes }) {
   return (
-    <aside className="ai-panel" aria-label="AI schedule preview">
-      <p className="eyebrow">AI Preview</p>
+    <aside className="ai-panel" aria-label="Schedule preview">
+      <p className="eyebrow">Plan preview</p>
       <h3>{preview.schedule}</h3>
       <p className="preview-copy">{preview.suggestion}</p>
 
@@ -28,7 +28,7 @@ function AiPreviewPanel({ preview, remainingTasksCount, totalMinutes }) {
         <p>{remainingTasksCount} active tasks before this entry.</p>
       </div>
     </aside>
-  )
+  );
 }
 
-export default AiPreviewPanel
+export default AiPreviewPanel;

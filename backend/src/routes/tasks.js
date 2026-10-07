@@ -5,9 +5,11 @@ import {
   getTasks,
   updateTaskStatus,
 } from '../controllers/tasksController.js'
+import { requireAuth } from '../middleware/requireAuth.js'
 
 const router = Router()
 
+router.use(requireAuth)
 router.get('/', getTasks)
 router.post('/', createTask)
 router.patch('/:id/status', updateTaskStatus)

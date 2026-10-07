@@ -192,7 +192,6 @@
   font-weight: 800;
 }
 
-.task-portions li .sms-state,
 .task-portions li .email-state {
   width: fit-content;
   padding: 3px 8px;
@@ -201,19 +200,16 @@
   color: #475569;
 }
 
-.task-portions li .sms-state.sent,
 .task-portions li .email-state.sent {
   background: #dcfce7;
   color: #166534;
 }
 
-.task-portions li .sms-state.failed,
 .task-portions li .email-state.failed {
   background: #fee2e2;
   color: #b91c1c;
 }
 
-.task-portions li .sms-state.skipped,
 .task-portions li .email-state.skipped {
   background: #fef3c7;
   color: #92400e;

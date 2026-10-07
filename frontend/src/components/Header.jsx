@@ -1,6 +1,6 @@
-import './Header.css'
+import "./Header.css";
 
-function Header({ activePage, onPageChange }) {
+function Header({ activePage, onLogOut, onPageChange, user }) {
   return (
     <header className="topbar">
       <div className="brand">
@@ -11,24 +11,26 @@ function Header({ activePage, onPageChange }) {
         </div>
       </div>
 
-      <nav className="page-tabs" aria-label="Scheduler pages">
-        <button
-          className={activePage === 'form' ? 'active' : ''}
-          type="button"
-          onClick={() => onPageChange('form')}
-        >
-          New Task
-        </button>
-        <button
-          className={activePage === 'records' ? 'active' : ''}
-          type="button"
-          onClick={() => onPageChange('records')}
-        >
-          Records
-        </button>
-      </nav>
+      <div className="topbar-actions">
+        <nav className="page-tabs" aria-label="Scheduler pages">
+          <button className={activePage === "form" ? "active" : ""} type="button" onClick={() => onPageChange("form")}>
+            New Task
+          </button>
+          <button className={activePage === "records" ? "active" : ""} type="button" onClick={() => onPageChange("records")}>
+            Records
+          </button>
+        </nav>
+        <div className="account-actions">
+          <span className="account-name" title={user.email}>
+            {user.name || user.email}
+          </span>
+          <button className="logout-button" onClick={onLogOut} type="button">
+            Log out
+          </button>
+        </div>
+      </div>
     </header>
-  )
+  );
 }
 
-export default Header
+export default Header;

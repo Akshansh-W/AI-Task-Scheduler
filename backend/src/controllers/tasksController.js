@@ -1,4 +1,5 @@
-import { getPool } from '../config/db.js'
+import mongoose from 'mongoose'
+import Task from '../models/Task.js'
 import { generateTaskSchedule } from '../services/geminiService.js'
 import {
   combineDateAndTime,
@@ -7,61 +8,53 @@ import {
   formatTimeValue,
 } from '../utils/dates.js'
 
-function mapTaskRows(rows) {
-  const taskMap = new Map()
+function mapTask(task) {
+  return {
+    id: task._id.toString(),
+    title: task.title,
+    owner: task.owner,
+    type: task.type,
+    priority: task.priority,
+    dueDate: formatDateValue(task.dueDate),
+    dueTime: formatTimeValue(task.dueTime),
+    duration: String(task.duration),
+    focusWindow: task.focusWindow,
+    reminder: task.reminder,
+    taskBrief: task.taskBrief,
+    dependencies: task.dependencies || '',
+    aiInstructions: task.aiInstructions || '',
+    autoPlan: Boolean(task.autoPlan),
+    emailAddress: task.emailAddress || '',
+    emailEnabled: Boolean(task.emailEnabled),
+    status: task.status,
+    scheduleSummary: task.scheduleSummary || '',
+    aiSource: task.aiSource,
+    createdAt: formatDisplayDate(task.createdAt),
+    completedAt: formatDisplayDate(task.completedAt),
+    parts: task.parts
+      .slice()
+      .sort((first, second) => first.sequence - second.sequence)
+      .map((part) => ({
+        id: part._id.toString(),
+        sequence: part.sequence,
+        title: part.title,
+        objective: part.objective,
+        startTime: formatTimeValue(part.startTime),
+        endTime: formatTimeValue(part.endTime),
+        scheduledAt: part.scheduledAt,
+        durationMinutes: part.durationMinutes,
+        notes: part.notes || '',
+        emailStatus: part.emailStatus || 'pending',
+        emailSentAt: part.emailSentAt,
+        emailError: part.emailError || '',
+      })),
+  }
+}
 
-  rows.forEach((row) => {
-    if (!taskMap.has(row.id)) {
-      taskMap.set(row.id, {
-        id: row.id,
-        title: row.title,
-        owner: row.owner,
-        type: row.type,
-        priority: row.priority,
-        dueDate: formatDateValue(row.due_date),
-        dueTime: formatTimeValue(row.due_time),
-        duration: String(row.duration),
-        focusWindow: row.focus_window,
-        reminder: row.reminder,
-        taskBrief: row.task_brief,
-        dependencies: row.dependencies || '',
-        aiInstructions: row.ai_instructions || '',
-        autoPlan: Boolean(row.auto_plan),
-        mobileNumber: row.mobile_number || '',
-        smsEnabled: Boolean(row.sms_enabled),
-        emailAddress: row.email_address || '',
-        emailEnabled: Boolean(row.email_enabled),
-        status: row.status,
-        scheduleSummary: row.schedule_summary || '',
-        aiSource: row.ai_source,
-        createdAt: formatDisplayDate(row.created_at),
-        completedAt: formatDisplayDate(row.completed_at),
-        parts: [],
-      })
-    }
-
-    if (row.part_id) {
-      taskMap.get(row.id).parts.push({
-        id: row.part_id,
-        sequence: row.sequence,
-        title: row.part_title,
-        objective: row.objective,
-        startTime: formatTimeValue(row.start_time),
-        endTime: formatTimeValue(row.end_time),
-        scheduledAt: row.scheduled_at,
-        durationMinutes: row.duration_minutes,
-        notes: row.notes || '',
-        smsStatus: row.sms_status || 'pending',
-        smsSentAt: row.sms_sent_at,
-        smsError: row.sms_error || '',
-        emailStatus: row.email_status || 'pending',
-        emailSentAt: row.email_sent_at,
-        emailError: row.email_error || '',
-      })
-    }
-  })
-
-  return Array.from(taskMap.values())
+function invalidIdError() {
+  const error = new Error('Task not found')
+  error.statusCode = 404
+  return error
 }
 
 function validateTaskInput(task) {
@@ -82,12 +75,6 @@ function validateTaskInput(task) {
     throw error
   }
 
-  if (task.smsEnabled && !String(task.mobileNumber || '').trim()) {
-    const error = new Error('mobileNumber is required when SMS reminders are enabled')
-    error.statusCode = 400
-    throw error
-  }
-
   if (task.emailEnabled && !String(task.emailAddress || '').trim()) {
     const error = new Error('emailAddress is required when email reminders are enabled')
     error.statusCode = 400
@@ -96,31 +83,8 @@ function validateTaskInput(task) {
 }
 
 async function fetchTasks() {
-  const db = getPool()
-  const [rows] = await db.query(`
-    SELECT
-      tasks.*,
-      task_parts.id AS part_id,
-      task_parts.sequence,
-      task_parts.title AS part_title,
-      task_parts.objective,
-      task_parts.start_time,
-      task_parts.end_time,
-      task_parts.scheduled_at,
-      task_parts.duration_minutes,
-      task_parts.notes,
-      task_parts.sms_status,
-      task_parts.sms_sent_at,
-      task_parts.sms_error,
-      task_parts.email_status,
-      task_parts.email_sent_at,
-      task_parts.email_error
-    FROM tasks
-    LEFT JOIN task_parts ON task_parts.task_id = tasks.id
-    ORDER BY tasks.created_at DESC, task_parts.sequence ASC
-  `)
-
-  return mapTaskRows(rows)
+  const tasks = await Task.find().sort({ createdAt: -1 })
+  return tasks.map(mapTask)
 }
 
 export async function getTasks(_request, response, next) {
@@ -133,9 +97,6 @@ export async function getTasks(_request, response, next) {
 }
 
 export async function createTask(request, response, next) {
-  const db = getPool()
-  const connection = await db.getConnection()
-
   try {
     const task = request.body
     validateTaskInput(task)
@@ -148,99 +109,39 @@ export async function createTask(request, response, next) {
       dueTime: task.dueTime || '09:00',
     })
 
-    await connection.beginTransaction()
+    const createdTask = await Task.create({
+      title: task.title.trim(),
+      owner: task.owner?.trim() || 'Unassigned',
+      type: task.type,
+      priority: task.priority,
+      dueDate: task.dueDate,
+      dueTime: task.dueTime || '09:00',
+      duration,
+      focusWindow: task.focusWindow,
+      reminder: task.reminder,
+      taskBrief: task.taskBrief.trim(),
+      dependencies: task.dependencies || '',
+      aiInstructions: task.aiInstructions || '',
+      autoPlan: Boolean(task.autoPlan),
+      emailAddress: task.emailAddress?.trim() || '',
+      emailEnabled: Boolean(task.emailEnabled),
+      scheduleSummary: schedule.summary,
+      aiSource: schedule.source,
+      parts: schedule.parts.map((part, index) => ({
+        sequence: index + 1,
+        title: part.title,
+        objective: part.objective,
+        startTime: part.startTime,
+        endTime: part.endTime,
+        scheduledAt: new Date(combineDateAndTime(task.dueDate, part.startTime)),
+        durationMinutes: part.durationMinutes,
+        notes: part.notes || '',
+      })),
+    })
 
-    const [result] = await connection.query(
-      `
-        INSERT INTO tasks (
-          title,
-          owner,
-          type,
-          priority,
-          due_date,
-          due_time,
-          duration,
-          focus_window,
-          reminder,
-          task_brief,
-          dependencies,
-          ai_instructions,
-          auto_plan,
-          mobile_number,
-          sms_enabled,
-          email_address,
-          email_enabled,
-          schedule_summary,
-          ai_source
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
-      [
-        task.title.trim(),
-        task.owner?.trim() || 'Unassigned',
-        task.type,
-        task.priority,
-        task.dueDate,
-        task.dueTime || '09:00',
-        duration,
-        task.focusWindow,
-        task.reminder,
-        task.taskBrief.trim(),
-        task.dependencies || '',
-        task.aiInstructions || '',
-        task.autoPlan ? 1 : 0,
-        task.mobileNumber?.trim() || null,
-        task.smsEnabled ? 1 : 0,
-        task.emailAddress?.trim() || null,
-        task.emailEnabled ? 1 : 0,
-        schedule.summary,
-        schedule.source,
-      ],
-    )
-
-    const taskId = result.insertId
-
-    for (const [index, part] of schedule.parts.entries()) {
-      await connection.query(
-        `
-          INSERT INTO task_parts (
-            task_id,
-            sequence,
-            title,
-            objective,
-            start_time,
-            end_time,
-            scheduled_at,
-            duration_minutes,
-            notes
-          )
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `,
-        [
-          taskId,
-          index + 1,
-          part.title,
-          part.objective,
-          part.startTime,
-          part.endTime,
-          combineDateAndTime(task.dueDate, part.startTime),
-          part.durationMinutes,
-          part.notes || '',
-        ],
-      )
-    }
-
-    await connection.commit()
-
-    const tasks = await fetchTasks()
-    const createdTask = tasks.find((item) => item.id === taskId)
-
-    response.status(201).json({ task: createdTask })
+    response.status(201).json({ task: mapTask(createdTask) })
   } catch (error) {
-    await connection.rollback()
     next(error)
-  } finally {
-    connection.release()
   }
 }
 
@@ -255,20 +156,21 @@ export async function updateTaskStatus(request, response, next) {
       throw error
     }
 
-    const db = getPool()
-    await db.query(
-      `
-        UPDATE tasks
-        SET status = ?, completed_at = ?
-        WHERE id = ?
-      `,
-      [status, status === 'completed' ? new Date() : null, id],
+    if (!mongoose.isValidObjectId(id)) {
+      throw invalidIdError()
+    }
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { status, completedAt: status === 'completed' ? new Date() : null },
+      { new: true, runValidators: true },
     )
 
-    const tasks = await fetchTasks()
-    const updatedTask = tasks.find((task) => task.id === Number(id))
+    if (!updatedTask) {
+      throw invalidIdError()
+    }
 
-    response.json({ task: updatedTask })
+    response.json({ task: mapTask(updatedTask) })
   } catch (error) {
     next(error)
   }
@@ -277,37 +179,23 @@ export async function updateTaskStatus(request, response, next) {
 export async function deleteCompletedTask(request, response, next) {
   try {
     const { id } = request.params
-    const db = getPool()
 
-    const [rows] = await db.query(
-      `
-        SELECT id, status
-        FROM tasks
-        WHERE id = ?
-      `,
-      [id],
-    )
-
-    if (rows.length === 0) {
-      const error = new Error('Task not found')
-      error.statusCode = 404
-      throw error
+    if (!mongoose.isValidObjectId(id)) {
+      throw invalidIdError()
     }
 
-    if (rows[0].status !== 'completed') {
+    const task = await Task.findById(id)
+    if (!task) {
+      throw invalidIdError()
+    }
+
+    if (task.status !== 'completed') {
       const error = new Error('Only completed tasks can be deleted')
       error.statusCode = 400
       throw error
     }
 
-    await db.query(
-      `
-        DELETE FROM tasks
-        WHERE id = ?
-      `,
-      [id],
-    )
-
+    await task.deleteOne()
     response.status(204).send()
   } catch (error) {
     next(error)

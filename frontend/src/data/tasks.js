@@ -12,8 +12,6 @@ export const emptyTask = {
   dependencies: '',
   aiInstructions: '',
   autoPlan: true,
-  mobileNumber: '',
-  smsEnabled: false,
   emailAddress: '',
   emailEnabled: true,
 }
